@@ -13,6 +13,7 @@
 \settopmatter{printacmref=false,authorsperrow=2}
 \renewcommand\footnotetextcopyrightpermission[1]{} 
 %\pagestyle{plain}
+\pagenumbering{gobble}
 
 \graphicspath{{images/}}
 
@@ -50,6 +51,8 @@
 
 %%%
 
+\noindent {\Huge Team Reflective Statement}
+\vspace{1em}
 
 \noindent \textbf{Yiru Pan (Vivian)}'s reflective statement:
 
@@ -89,6 +92,14 @@ Overall, I enjoyed our team work and learned significant knowledge from this pro
 For the algorithm, I choose RSA since I wanted to study deeper and go-beyond the topic taught in the class. The motivation is related to my real life working experience where I need to develop and deploy distributed systems and oversee many Cloud Computing Clusters and instances. On daily basis, tools such as SSH, OpenSSL, PyCA and BouncyCastle are my tool-of-trade to develop and deploy software in client-server environment. Generating SSL certificates, revoking and maintaining certificates, signing software releases, as such daily routines involve dealing with Public Key Cryptography and, encounter with RSA is inevitable. I am glad I have enrolled this subject and undertake rigorous assessments to strengthen my knowledge further on cryptography and underlying mathematics.
 
 In term of contribution to team work, my teammates are kind enough to nominate me as a team leader. As a team leader, I initiated to carry out research methods, gather related quality literature, brainstorm benchmarking methodology, formulate evaluation strategy, propose tools and quality implementations, write Python code, setup Cloud VM, perform cross comparison runtime and analysis, draw conclusion, take care of report format and overall editorial on Latex. Furthermore, I also try my best to understand and extend my contribution on the rest of the digital signature algorithms presenting in this research paper. Closely collaboration with my teammate make me reach to the deeper level of understanding on the presenting topics; of which doing it all by myself alone might not be possible within short amount of time. As a team, it is our mutual goal to get highest mark on the research work we present. Therefore, all team members work hard to present the quality research and excellent experiment at our best effort. All in all, I believe, we are the high performance team!
+
+\vspace{2em}
+
+\noindent For Latex authoring, we use Overleaf (\url{https://www.overleaf.com}). For report format, we use ACM conference paper and citation format in 10pt, two-columns template.
+\begin{itemize}
+    \item \url{https://www.acm.org/publications/proceedings-template}
+    \item \url{https://github.com/borisveytsman/acmart/}
+\end{itemize}
 
 \vspace{2em}
 
@@ -134,7 +145,8 @@ COMP90043 Cryptography and Security, 2018 SM2
 
 \section{Introduction}
 
-Digital signature is a mathematical scheme that used to validate the authenticity of a message. By signing a digital document, one can ensure that the signer is the original author of the digital document and, other parties cannot modify it. It is widely used technique to add authentication, integrity and non-repudiation properties to a digital document. The idea of digital signature is one of the applied public key cryptography discussed in Diffie-Hellman paper \cite{Diffie:2006:NDC:2263321.2269104}. Several digital schemes have been proven to provide valid authentication for signing and verifying a message. Among them, we choose 3 digital signature algorithms -- RSA, ECC and Lamport scheme -- to evaluate and compare them.
+Digital signature is a mathematical scheme that used to validate the authenticity of a message. By signing a digital document, one can ensure that the signer is the original author of the digital document and, other parties cannot modify it. It is widely used technique to add authentication, integrity and non-repudiation properties to a digital document. The idea of digital signature is one of the applied public key cryptography originally discussed in Diffie-Hellman paper \cite{Diffie:2006:NDC:2263321.2269104}. %Several digital schemes have been proven to provide valid authentication for signing and verifying a message. 
+Particularly, we are interested in 3 digital signature algorithms -- RSA, ECC and Lamport signature -- to evaluate and compare them.
 
 \subsection{Background}
 
@@ -145,7 +157,7 @@ We also investigate EdDSA \cite{Bernstein2012} that has used twisted Edwards cur
 However, ECC discrete logarithms computation is known to be broken by Shor's algorithm \cite{Shor:1997:PAP:264393.264406} on a hypothetical quantum computer.
 
 Lamport one-time digital signature scheme \cite{lamport} is an efficient method for constructing a digital signature. %One time means that a signature can be used only once due to the algorithm design. When verifying the signature, it reveals a part of the private key. Lamport signatures can be built from any cryptographically secure one-way hash function. 
-It has been the subject of increased attention due to its characteristics like fast verification, one-way property and quantum computing resistant. RSA, ECC rely on the computation complexity which is expected to be broken when a quantum computer is practically implemented.
+It has been increased interest due to characteristics such as fast verification, one-way property and quantum-proof. RSA, ECC rely on the computational hard problems which are prone to be broken when a quantum computer is practically implemented.
 
 \subsection{Motivation}
 
@@ -154,32 +166,40 @@ In this project, we explore 3 digital signature schemes: RSA, ECC, and Lamport s
 \subsection{Experiment Setup and Tools}
 
 %Since we focus on observing performance comparison and security trade-off evaluation, 
-We begin our research on publicly accessible quality implementation of these algorithms. After experimenting many initial trials, we have empirically finalised to choose the cryptographic tools and libraries as summarised in the Table~\ref{tab:libTable}. Our choice of programming language is Python and, therefore we have investigated tools and wrapper around these chosen libraries. We have also written our best effort implementation, sourced and utilised third party implementation for each digital signature scheme when we deem appropriate to strengthen our discussion and experiments. Such activity, sources and details are further cited and discussed in each algorithm section.
+We begin our research on publicly accessible quality implementation of these algorithms. After experimenting many initial trials, we have empirically finalised to choose the following cryptographic tools and libraries for experiment.
+\begin{itemize}
+    \item OpenSSL (\url{https://www.openssl.org})
+    \item NaCl (\url{https://nacl.cr.yp.to})
+    \item LibSodium (\url{https://libsodium.org})
+\end{itemize}
+
+Our choice of programming language is Python and, therefore we have investigated tools and wrapper around these chosen libraries. We have also written our best effort implementation, sourced and utilised third party implementation for each digital signature scheme when we deem appropriate to strengthen our discussion and experiments. Such activity, sources and details are further cited and discussed in respective section.
 
 Additionally, in order to get the uniform experiment result, we use NeCTAR (\url{https://nectar.org.au}) Research Cloud virtual machine (VM) instance for all our runtime benchmarking. This NeCTAR Cloud VM is the \textit{m2.medium} instance flavour which comprise of \textbf{2 vCPU} and \textbf{6GB RAM} memory. The choice of base operating system is \textit{Ubuntu 18.04.1 LTS}. We name this Cloud VM to \textbf{Krypton} for easy reference. 
+% \begin{table}
+% \caption{Chosen Cryptographic Implementations}
+%     \begin{tabular}{ |p{2cm}|p{5.5cm}|  }
+%     \hline
+%     \textbf{Name} & \textbf{Link} \\
+%     \hline
+%     OpenSSL & \url{https://www.openssl.org} \\
+%     \hline
+%     NaCl & \url{https://nacl.cr.yp.to} \\
+%     \hline
+%     libsodium & \url{https://libsodium.org} \\
+%     \hline    
+%     \end{tabular}
+%   \label{tab:libTable}
+% \end{table}
 
-\begin{table}[H]
-\caption{Chosen Cryptographic Implementations}
-    \begin{tabular}{ |p{2cm}|p{5.5cm}|  }
-    \hline
-    \textbf{Name} & \textbf{Link} \\
-    \hline
-    OpenSSL & \url{https://www.openssl.org} \\
-    \hline
-    NaCl & \url{https://nacl.cr.yp.to} \\
-    \hline
-    libsodium & \url{https://libsodium.org} \\
-    \hline    
-    \end{tabular}
-  \label{tab:libTable}
-\end{table}
-
-For the choice of datasets, we decided to use the Comma-separated Values (CSV) test data that is publicly available from the following website.
+\noindent For the test datasets, we use the Comma-separated Values (CSV) data that is publicly available at:
 \begin{itemize}
     \item \href{http://eforexcel.com/wp/downloads-18-sample-csv-files-data-sets-for-testing-sales/}{http://eforexcel.com/wp/category/downloads/}
 \end{itemize}
 
-The remainder of this report is organised as follows. Sections 2, 3, 4 and 5 covers RSA, ECDSA, EdDSA and Lamport signature scheme investigation details. Section 6 provides cross comparison performance analysis and quantitative research on generating runtimes. Finally, section 7 gives qualitative research outcome, concluding remarks and identify future works.
+The average message size is 160 bytes per-line in plain text format. Initially, we also aim to experiment on different data formats (jpg, doc). Since our focus is observing algorithm characteristic, a small plain text message is sufficient enough for our experiment. Besides, we justify that the message will get hash function applied before signing process.
+
+The remainder of the paper is organised as follows. Sections 2, 3, 4 and 5 covers RSA, ECDSA, EdDSA and Lamport signature scheme investigation details. Section 6 provides cross comparison performance analysis and quantitative research on generating runtime measurement. Finally, section 7 gives qualitative research outcome, concluding remarks and identify future works.
 
 %%% RSA START
 
@@ -195,7 +215,7 @@ For computing RSA digital signature, it is the inverted operation of encryption 
 
 \subsection{Signature Security}
 
-We observe that RSA problem is stronger assumption than Integer Factoring problem. It means that when it might be possible to find an efficient algorithm for the RSA problem but finding efficient algorithm for the factoring problem remains infeasible. According to \cite{case2003beginner}, we learn that the General Number Field Sieve (GNFS) algorithm is the best known efficient algorithm for integer factoring which has run time complexity of $exp\big((c + o(1)) n^{1/3} log^{2/3}n\big)$ on $n$-bit integers for some $c < 2$.
+We observe that RSA problem is stronger assumption than Integer Factoring problem. It means that when it might be possible to find an efficient algorithm for the RSA problem but finding efficient algorithm for the factoring problem remains infeasible. According to \cite{case2003beginner}, we learn that the General Number Field Sieve (GNFS) algorithm is the best known efficient algorithm for integer factoring which has run time complexity of $exp\big((c + o(1)) n^{1/3} log^{2/3}n\big)$ on $n$-bit integers for some $c < 2$. Generally speaking, it is sub-exponential time complexity.
 
 Since introduction of RSA and more than 30-years, RSA "hard" problem assumptions withstand mathematical attacks, when RSA is implemented and used properly. However, studies \cite{boneh1999twenty} \cite{coppersmith1997small} \cite{coron2000new} show that many attacks are still possible for improper use of RSA algorithm. In the context of research presenting in this paper, we are interested in attacks related to RSA digital signature scheme and, its countermeasures. In previous section, we explain mathematical foundation on how basis RSA work. This simple version of RSA is also referred to as \textbf{Textbook RSA} in cryptography literature. 
 
@@ -435,7 +455,7 @@ From the above analysis we can conclude that ECDSA with the smaller key size can
 \\
 \noindent \textbf{Implementation Method}
 
-We use three different packages found online to implement ECDSA process. The first one is implemented purely in Python and released under the MIT license \cite{BrianWarnerECDSA}. When trying to use this package to implement ECDSA, we find out it takes significantly time to all of the three stages. They we explore online and decide to adopt the second approach, FastECDSA, which is implemented in C \cite{AntonKueltzECDSA}. The third method we use the python cryptography library that has OpenSSL backend \cite{PyCACryptography}. As shown in Figure~\ref{fig:ECDSA_Implementation_Compare_Steps}, the pure python package takes substantially much time than the other two approaches, especially in Key Generation and Signature Verification stages. The package that uses OpenSSL has the best performance in all stages.
+We use three different packages found online to implement ECDSA process. The first one is implemented purely in Python and released under the MIT license \cite{BrianWarnerECDSA}. When trying to use this package to implement ECDSA, we find out it takes significantly longer time to all of the three stages. Then, we explore online and decide to adopt the second approach, FastECDSA, which is implemented in C \cite{AntonKueltzECDSA}. For third method, we use the python cryptography library that has OpenSSL backend \cite{PyCACryptography}. As shown in Figure~\ref{fig:ECDSA_Implementation_Compare_Steps}, the pure python package takes substantially much time than the other two approaches, especially in Key Generation and Signature Verification stages. The package that uses OpenSSL has the best performance in all stages.
 
 \begin{figure}[H]
 \centering
@@ -446,12 +466,12 @@ We use three different packages found online to implement ECDSA process. The fir
 
 \subsection{Security Considerations}
 
-The most important security considerations when using ECDSA is to against the chosen-message attack. Attacker obtains the sender’s signature on a collection of messages(excluding $m$) and his goal is to obtain a valid signature on a single message $m$. We classify the possible attacks into three categories as follows. 
+The most important security considerations when using ECDSA is to against the chosen-message attack. Attacker obtains the sender's signature on a collection of messages (excluding $m$) and his goal is to obtain a valid signature on a single message $m$. We classify the possible attacks into three categories as follows. 
 \\
 \\
 \noindent \textbf{Per-message Secrets}
 
-One attack in Signature Generation stage is is related to the per-message secrets k. If the same secret k is using many times, attackers can easily break ECDSA and obtain the entities' secret keys. The mechanism is shown in Breaking ECDSA Algorithm~\ref{algo:Breaking_ECDSA} below.
+One attack in Signature Generation stage is related to the per-message secrets $k$. If the same secret $k$ is using many times, attackers can easily break ECDSA and obtain the entities' secret keys. The mechanism is shown in Breaking ECDSA Algorithm~\ref{algo:Breaking_ECDSA} below.
 
 \begin{algorithm}
 \begin{algorithmic}
@@ -465,17 +485,17 @@ One attack in Signature Generation stage is is related to the per-message secret
 \label{algo:Breaking_ECDSA}
 \end{algorithm}
 
-Sony used a static $k$ as the secret to generate all the signatures in August 2013. Initially only the signed games can run on PS3 game console. After the attacker break ECDSA and recover the secret key, everyone can play every games. This issue can be avoided by destroying after each message is signed.
+Sony Corporation used a static $k$ as the secret to generate all the signatures in August 2013. Initially only the signed games can run on PS3 game console. After the attacker break ECDSA and recover the secret key, everyone can play every games. This issue can be avoided by destroying after each message is signed.
 \\
 \\
 \noindent \textbf{ECDLP Attacks}
 
-To ensure ECDSA is secure, the elliptic cryptography discrete logarithm problem (ECDLP) cannot be easily solved. It is defined in Key Generation stage as solving for $d$ in $Q=dG$. WIthin many known attacks against ECDLP, there are four very famous ones. Exhaustive search, Pohlig-Hellman, Pollard-rho and Multiple logarithms, which are described in detail in [1]. 
+To ensure ECDSA is secure, the elliptic cryptography discrete logarithm problem (ECDLP) cannot be easily solved. It is defined in Key Generation stage as solving for $d$ in $Q=dG$. Within many known attacks against ECDLP, there are four very famous ones. Exhaustive search, Pohlig-Hellman, Pollard-rho and Multiple logarithms, which are described details in \cite{johnson2001elliptic}. 
 \\
 \\
 \noindent \textbf{Other Attacks}
 
-The hash function that is used to encrypted the original message is better to be collision resistant. Traditional hash function such as SHA-1 is not collision resistant nor preimage resistant, thus are weak to the attackers. Implementation attacks such as timing attacks and differential fault analysis could be happen as well.
+The hash function that is used to encrypt the original message is better to be collision resistant. Traditional hash function such as SHA-1 is not collision resistant nor preimage resistant, thus are weak to the attackers. Implementation attacks such as timing attacks and differential fault analysis could happen as well.
 
 
 
@@ -568,7 +588,7 @@ Furthermore, we found three implementations for EdDSA and intended to figure out
 
 It is clear that all three implementations' total execution time grows almost linearly with input size increasing, which means input size has no influence with the individual execution time for each message no matter what implementation is applied.
 
-Besides, ed25519 package takes much more time than the other two packages, therefore, different implementations do have big influence in terms of total time even though we can be sure that we all implement same algorithm (provide same level security), because they all just offer a python interface to a C implementation of Ed25519 public key signature system (\url {http://ed25519.cr.yp.to}) and refer to original paper\cite{Bernstein2012}, provided by creators of this algorithm, Bernstein et al. 
+Besides, ed25519 package takes much more time than the other two packages, therefore, different implementations do have big influence in terms of total time even though we can be sure that we all implement same algorithm (provide same level security), because they all just offer a python interface to a C implementation of Ed25519 public key signature system (\url {http://ed25519.cr.yp.to}) and refer to original paper \cite{Bernstein2012}, provided by creators of this algorithm, Bernstein et al. 
 
 So as to understand how much each step contributes to the total time for three implementations, we used the fixed message size of 6000 lines (i.e. fixed load), and evaluated execution times for each implementation as shown in Figure~\ref{fig:EdDSA_Implementation_Compare_Steps}. It is obvious that key generation and signing processes almost take the same amount of time, however, verifying process takes much more time than these two, which is two to three times longer. As we analysed before, the verifying process needs much more complicated mathematics computation, thus, it is reasonable that it takes much longer time.
 
@@ -608,7 +628,7 @@ However, it might still be vulnerable to fault attacks. In \cite{8167706}, they 
 \label{algo:EdDSA_Fault_Algo}
 \end{algorithm}
 
-Then, they found that by selecting r as a random number, they can computer a new (R, S) as a signature for the message M where the equation would be:
+Then, they found that by selecting $r$ as a random number, they can compute a new $(R, S)$ as a signature for the message M where the equation would be:
 
 \begin{align*}
     8S \cdot B = 8(r + H(R,A,M) a) \cdot B = 8 \cdot R + 8H(R,A,M) a \cdot B \\
@@ -633,11 +653,11 @@ The Lamport signature scheme performs its working in three steps.
 
 \vspace{0.5em}
 
-\noindent\textbf{Keys Generation:} \quad Use random number generator to produce 256 key pairs of random numbers as private key, each number is 256 bits, total  KiB. The public key is the corresponding hash value(SHA256) of private key, thus implementing 512 hashes, each 256 bits in size, public key has same size with private key.\\
+\noindent\textbf{Keys Generation:} \quad Use random number generator to produce 256 key pairs of random numbers as private key, each number is 256 bits, total 16 KiB. The public key is the corresponding hash value (SHA256) of private key, thus implementing 512 hashes, each 256 bits in size, public key has same size with private key.\\
 
-\noindent\textbf{Message Signing:} \quad Creates a 256-bit hash sum of the message. For each n-th bit in the hash sum, pick a corresponding number from the private key. For example, if the n-th bit is 0, pick an n-th number in the first row, if the n+1th bit is 1, pick the n+1th number from the second row. This way produces 256 numbers each of 256 bits, the signature size is total  = 8 KiB.\\
+\noindent\textbf{Message Signing:} \quad Create a 256-bit hash sum of the message. For each n-th bit in the hash sum, pick a corresponding number from the private key. For example, if the n-th bit is 0, pick an n-th number in the first row, if the n+1th bit is 1, pick the n+1th number from the second row. This way produces 256 numbers each of 256 bits, the signature size is total  = 8 KiB.\\
 
-\noindent\textbf{Signature Verification:} \quad Creates a 256-bit hash sum of the message. Pick the corresponding public key for each bit, then calculate hash value of each number in signature. If hash values are same as the values picked from public key, it indicates the message received is original, otherwise, the message or signature has been tampered during the transmission or does not belong to sender. 
+\noindent\textbf{Signature Verification:} \quad Create a 256-bit hash sum of the message. Pick the corresponding public key for each bit, then calculate hash value of each number in signature. If hash values are same as the values picked from public key, it indicates the message received is original, otherwise, the message or signature has been tampered during the transmission or does not belong to sender. 
 \vspace{0.5em}
 
 \noindent The Figure~\ref{fig:Lamport_Implementation_Details} illustrates every step.
@@ -666,18 +686,18 @@ sig(m_1 \dots m_k) = (Priv_{1,m1,}, \dots , Priv_{k,mk}) = (s_1, \dots, s_k)
 
 \textbf{Strength:} \quad An important factor in the strength of Lamport signature scheme is flexible. If a hash function that is employed with the scheme is proven to be weak, it can easily be replaced with another strong hash function. The common hash used in Lamport signature scheme is SHA256, which is proved as secure in most scenarios.
 
-Lamport signature scheme is quantum resistant due to a large number of hash functions it employees in its implementation. Other digital signature schemes such as RSA, ECC, whose credibility depends on their algorithm complexity. They are much prone to be broken by quantum computer\cite{8346359}. The increasing developments towards a practical computer is a threat to such signature schemes.
+Lamport signature scheme is quantum resistant due to a large number of hash functions it employees in its implementation. Other digital signature schemes such as RSA, ECC, whose credibility depends on their algorithm complexity. They are much prone to be broken by quantum computer \cite{8346359}. The increasing development towards a practical computer is a threat to such signature schemes.
 
-Lamport signature scheme cost less time than traditional signature scheme based on public key cryptography. It is suitable to apply on the resource-constrained devices like IoT devices.
+Lamport signature scheme costs less time than traditional signature scheme based on public key cryptography. It is suitable to apply on the resource-constrained devices like IoT devices.
 \\
 \\
-\noindent \textbf{Weakness:} \quad Large computation and storage requirements are the main limitations of Lamport signature. For example, sender randomly generates 256 pairs of 256-bit numbers as private key, the total size of these pairs equals $2*256*256=16$ KiB. Sender need to calculate 512 times hash of private key then get corresponding public key, which has same size 16KiB. The signature's size is the half of private key or public key, that is 8KiB. Compared to other signature scheme like RSA, the signature size is relative large. Similarly, receiver need to calculate 256 times hash of signature in verification process. Besides, this is one time scheme, key pairs cannot be used next time. It indeed requires a large memory to store these key pair in signing process. Lamport signature scheme puts more loads on devices' storage and computation compared with traditional signature schemes\cite{8402796}.
+\noindent \textbf{Weakness:} \quad Large computation and storage requirements are the main limitations of Lamport signature. For example, sender randomly generates 256 pairs of 256-bit numbers as private key, the total size of these pairs equals $2*256*256=16$ KiB. Sender needs to calculate 512 times hash of private key then get corresponding public key, which has same size 16KiB. The signature's size is the half of private key or public key, that is 8KiB. Compared to other signature scheme like RSA, the signature size is relatively large. Similarly, receiver needs to calculate 256 times hash of signature in verification process. Besides, this is one time scheme, key pairs cannot be used next time. It indeed requires a large memory to store these key pairs in signing process. Lamport signature scheme puts more loads on devices' storage and computation compared with traditional signature schemes \cite{8402796}.
 
 The key pair can be only used to sign one message each time. If there are multiple messages to be signed, many key pairs have to be generated for a safety purpose. 
 
 \subsection{Experiment}
 
-The objective of this experiment is to measure the execution time of Lamport Signature algorithm and find which step costs most of time. The program was written in Python, and no package was used. The test data set includes three different size csv files, which are 1000 entries, 5000 entries and 10000 entries. The default hash function is SHA256. The execution time of the program is as the form below:
+The objective of this experiment is to measure the execution time of Lamport Signature algorithm and find which step costs most of time. The program was written in Python, and no package was used. The test data set includes three different size csv files, which are 1000 entries, 5000 entries and 10000 entries. The default hash function is SHA256. The execution time of the program is as shown in Figure~\ref{fig:Lamport_Runtime_Table} table.
 
 \begin{figure}[H]
 \centering
@@ -693,11 +713,11 @@ The objective of this experiment is to measure the execution time of Lamport Sig
 \label{fig:Lamport_Runtime_Graph}
 \end{figure}
 
-From the chart, we can find key generation accounts for large part of time, nearly 90\% of total time, the performance of Lamport signature scheme is dominated by key generation time. Because large amount of hash calculations is in key generation step, for this case, there are 512 random numbers in public key, so there are total 512 times SHA256 calculations. While in sign message step, the program only calculates the hash of message. In verifying step, the program only calculates 256 times SHA256. Therefore, it is obvious that key generation is the most time-consuming step in Lamport signature.
+From the chart in Figure~\ref{fig:Lamport_Runtime_Graph}, we can observe that  key generation accounts for large part of time, nearly 90\% of total time, the performance of Lamport signature scheme is dominated by key generation time. Because large amount of hash calculations are in key generation step, for this case, there are 512 random numbers in public key, so there are total 512 times SHA256 calculations. While in sign message step, the program only calculates the hashsum of message. In verifying step, the program only calculates 256 times SHA256. Therefore, it is obvious that key generation is the most time-consuming step in Lamport signature.
 
 \subsection{Security Analysis}
 
-The security performance of Lamport signature is dominated by its hash function. For a hash function that generates an n-bit message digest, according to Grover's algorithm \cite{8463331}, finding a pre-image collision on a single invocation of an ideal hash function is upper bound on $Ο(2^{n/2})$ operations under a quantum computing model. For each private key and its corresponding public key pair in Lamport signature, the private key length must be selected so performing a pre-image attack on the length of the input is not faster than performing a pre-image attack on the length of the output. For example, if each private key element was only 16 bits in length, it is trivial to exhaustively search all $2^{16}$ possible private combinations in $2^{16}$ operations to find a match with the output. Based on Grover's algorithm, a quantum secure system, the length of the public key elements and private key elements and the signature elements must be no less than 2 times larger than the security rating of the system \cite{4897262}. An 80-bit secure system uses element lengths of no less than 160 bit, a 128-bit secure system uses element lengths of no less than 256 bit. SHA256 is commonly used in Lamport signature, SHA512 is much safer but at the cost of longer key generating time and larger signature size. 
+The security performance of Lamport signature is dominated by its hash function. For a hash function that generates an n-bit message digest, according to Grover's algorithm \cite{8463331}, finding a pre-image collision on a single invocation of an ideal hash function is upper bound on $Ο(2^{n/2})$ operations under a quantum computing model. For each private key and its corresponding public key pair in Lamport signature, the private key length must be selected so performing a pre-image attack on the length of the input is not faster than performing a pre-image attack on the length of the output. For example, if each private key element was only 16 bits in length, it is trivial to exhaustively search all $2^{16}$ possible private combinations in $2^{16}$ operations to find a match with the output. Based on Grover's algorithm, a quantum secure system, the length of the public key elements and private key elements and the signature elements must be no less than 2 times larger than the security rating of the system \cite{4897262}. An 80-bit secure system uses element lengths of no less than 160 bits, a 128-bit secure system uses element lengths of no less than 256 bits. SHA256 is commonly used in Lamport signature, SHA512 is much safer but at the cost of longer key generating time and larger signature size. 
 
 \subsection{Improvement}
 
@@ -737,7 +757,7 @@ Figure~\ref{fig:Cross_Compare_Krypton_Runtimes_Graph} and tables in Figure~\ref{
 
 We further verify this hypothesis by running the same setup and benchmarking on the laptop which is MacBook Pro with CPU Intel Core i5 3.1GHz and 16GB of RAM, running macOS Mojave. We make sure that the MacBook Pro has no compute intensive task running background and optimal, while performing the runtime benchmarking. Figure~\ref{fig:Cross_Compare_MacBookPro_Runtimes_Graph} and tables in Figure~\ref{fig:Cross_Compare_MacBookPro_Runtimes} show the result of running with the \textit{physical} CPU. The result shows highly correlation with the Krypton Cloud vCPU result in all algorithm implementation, except A3 (\verb|eddsa_25519.py|). The A3 runtime on \textit{physical} CPU result shows that it run much faster than its vCPU counterpart.
 
-We observe that the nature of cryptographic algorithms are compute intensive and affinity to the type of CPU used. In this case, there will be significant differences in \textit{virtual} CPU vs \textit{physical} CPU. However, we empirically justify that Cloud Computing is found everywhere \cite{Armbrust:2010:VCC:1721654.1721672} and, the usage of these cryptographic algorithms on such Cloud platform become norm and ubiquitous deployment. We also further proof that the runtime performance of these algorithms are CPU agnostic in such that ECC algorithms usually take more time on signing and verification process; similarly, RSA and DSA algorithms usually take more time on key generation step regardless of CPU type. This outcome correlate with the mathematical characteristic of each algorithms as we discussed in previous sections.
+We observe that the nature of cryptographic algorithms are compute intensive and affinity to the type of CPU used. In this case, there will be significant differences in \textit{virtual} CPU vs \textit{physical} CPU. However, we empirically justify that Cloud Computing is found everywhere \cite{Armbrust:2010:VCC:1721654.1721672} and, the usage of these cryptographic algorithms on such Cloud platform become norm and ubiquitous deployment. We also further proof that the quality aspect of these algorithms are CPU agnostic in such that we can generally say ECC algorithms usually take more time on signing and verification process; similarly, RSA and DSA algorithms usually take more time on key generation step regardless of CPU type or what platform they run on. This outcome correlate with the mathematical characteristic of each algorithms as we discussed in previous sections.
 
 \begin{figure*}
 \centering
@@ -759,7 +779,7 @@ Table in Figure~\ref{fig:Qualitative_Evaluation} summarise the qualitative measu
 
 \noindent \textbf{Computational Overhead:} \quad In term of compute overhead, RSA has to consider padding and randomness scheme such as PSS. ECDSA inherits complex computation in its signing and verification process. EdDSA has to consider the built-in hash computation and its scalar multiplication. Lamport signature needs many hash calculations.
 
-\noindent \textbf{Security Strength:} \quad In term of security strength, all algorithm can withstand NIST rating of security strength 128-bit \cite{nistKeysizes}, which is similar difficulty to breaking strong 128-bit block ciphers. With $2^{128}$ security target, RSA with key size 3072-bit, ECDSA with P-256, EdDSA with Ed25519 and Lamport signature with SHA-256 can operate at fairly optimal runtime and without compromising too much on performance.
+\noindent \textbf{Security Strength:} \quad In term of security strength, all algorithm can withstand NIST rating of security strength 128-bit \cite{nistKeysizes}, which is similar difficulty to breaking strong 128-bit block ciphers. With $2^{128}$ security target, RSA with key size 3072-bit, ECDSA with P-256, EdDSA with Ed25519 and Lamport signature with SHA-256 can achieve fairly strong security strength without compromising too much performance.
 
 \noindent \textbf{Key Size:} \quad For the key size requirement, we rate RSA is medium, ECDSA key size is small, EdDSA key is the smallest and Lamport signature requires large key size.
 
