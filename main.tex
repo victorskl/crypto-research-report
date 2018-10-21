@@ -655,9 +655,9 @@ The Lamport signature scheme performs its working in three steps.
 
 \noindent\textbf{Keys Generation:} \quad Use random number generator to produce 256 key pairs of random numbers as private key, each number is 256 bits, total 16 KiB. The public key is the corresponding hash value (SHA256) of private key, thus implementing 512 hashes, each 256 bits in size, public key has same size with private key.\\
 
-\noindent\textbf{Message Signing:} \quad Create a 256-bit hash sum of the message. For each n-th bit in the hash sum, pick a corresponding number from the private key. For example, if the n-th bit is 0, pick an n-th number in the first row, if the n+1th bit is 1, pick the n+1th number from the second row. This way produces 256 numbers each of 256 bits, the signature size is total  = 8 KiB.\\
+\noindent\textbf{Message Signing:} \quad Create a 256-bit hashsum of the message. For each n-th bit in the hashsum, pick a corresponding number from the private key. For example, if the n-th bit is 0, pick an n-th number in the first row, if the n+1th bit is 1, pick the n+1th number from the second row. This way produces 256 numbers each of 256 bits, the signature size is total 8 KiB.\\
 
-\noindent\textbf{Signature Verification:} \quad Create a 256-bit hash sum of the message. Pick the corresponding public key for each bit, then calculate hash value of each number in signature. If hash values are same as the values picked from public key, it indicates the message received is original, otherwise, the message or signature has been tampered during the transmission or does not belong to sender. 
+\noindent\textbf{Signature Verification:} \quad Create a 256-bit hashsum of the message. Pick the corresponding public key for each bit, then calculate hash value of each number in signature. If hash values are same as the values picked from public key, it indicates the message received is original, otherwise, the message or signature has been tampered during the transmission or does not belong to sender. 
 \vspace{0.5em}
 
 \noindent The Figure~\ref{fig:Lamport_Implementation_Details} illustrates every step.
@@ -672,7 +672,7 @@ The Lamport signature scheme performs its working in three steps.
 
 \subsection{Mathematical Notation}
 
-\textbf{Keys:} \quad Let $k$ be a positive integer and let $m = \{0,1\}^k$ be the hash sum of the message. Let $f:Priv \to Pub$ be a one way hash function. For $1 \leq i \leq k$ and $j \in \{0,1\}$, the sender computes hash value of each random number $Priv_{i,j}$, and get $Pub_{i,j} = f (Priv_{i,j})$. The size of private key is 2k, the size of public key is 2k as well.
+\textbf{Keys:} \quad Let $k$ be a positive integer and let $m = \{0,1\}^k$ be the hashsum of the message. Let $f:Priv \to Pub$ be a one way hash function. For $1 \leq i \leq k$ and $j \in \{0,1\}$, the sender computes hash value of each random number $Priv_{i,j}$, and get $Pub_{i,j} = f (Priv_{i,j})$. The size of private key is 2k, the size of public key is 2k as well.
 \\
 \\
 \noindent \textbf{Signing a message:} \quad Let $m = m_1 \dots m_k \in \{0,1\}^k$. The signature of the message is:
